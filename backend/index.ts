@@ -1,18 +1,23 @@
 import express from "express";
-import mongoose, { Mongoose } from "mongoose";
-import mysql from "mysql";
 import dotenv from "dotenv";
+import { DBResultLogin } from "./types/DBResult";
+import loginRouter from "./routes/loginroute";
+// config .env file.
 dotenv.config();
-const connection = mysql.createConnection(process.env.SQL_STR!);
-
+// create express app.
 const app = express();
-
-app.get("/thanhtoan", (req, res) => {
-  // lam cai gii day
-  res.send({
-    isOk: "OK Nha",
-  });
+// use middleware, accept all headers.
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
 });
+app.use(express.json());
+
+// use Login router.
+app.use("/login", loginRouter);
+
+// server listen to request.
 app.listen(3000, () => {
   console.log("App starting on port 3000");
 });

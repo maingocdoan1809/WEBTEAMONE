@@ -1,0 +1,25 @@
+.container {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.form {
+  border: 1px solid rgb(164, 164, 164);
+  padding: 5% 10%;
+  border-radius: .5rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: .5em;
+}
