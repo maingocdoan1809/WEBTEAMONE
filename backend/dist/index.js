@@ -4,15 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const mongoose_1 = __importDefault(require("mongoose"));
-mongoose_1.default
-    .connect("mongodb+srv://maingocdoan:280254581809@cluster0.4u81pgm.mongodb.net/?retryWrites=true&w=majority")
-    .then(() => {
-    console.log("Connected");
-})
-    .catch((err) => {
-    console.log("Cannot connect: " + err);
-});
+const mysql_1 = __importDefault(require("mysql"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const connection = mysql_1.default.createConnection(process.env.SQL_STR);
 const app = (0, express_1.default)();
 app.get("/thanhtoan", (req, res) => {
     // lam cai gii day
