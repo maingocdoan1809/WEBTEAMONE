@@ -14,8 +14,11 @@ mongoose_1.default
     console.log("Cannot connect: " + err);
 });
 const app = (0, express_1.default)();
-app.get("/", (req, res) => {
-    res.send("Hello from typescript");
+app.get("/thanhtoan", (req, res) => {
+    // lam cai gii day
+    res.send({
+        isOk: "OK Nha",
+    });
 });
 app.listen(3000, () => {
     console.log("App starting on port 3000");
