@@ -5,12 +5,14 @@
   justify-content: center;
   align-items: center;
   padding: 30px;
+  background-color: #ECF2FF;
 }
 
 .form {
-  border: 1px solid rgb(164, 164, 164);
-  padding: 5% 10%;
+  border: none;
+  padding: 30px;
   border-radius: .5rem;
+  background-color: #ffff;
 }
 
 .center {

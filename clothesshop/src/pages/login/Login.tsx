@@ -31,10 +31,10 @@ function Login() {
   };
   return (
     <>
-      <div className={`row ${style.container}`}>
-        <div className={`col-md-5  ${style.form}`}>
+      <div className={` ${style.container}`}>
+        <div className={` shadow   ${style.form}`}>
           <div className="mb-3">
-            <h1 className={`${style.center}`}>Login</h1>
+            <h2 className={`${style.center}`}>Login</h2>
           </div>
           <div className="form-floating mb-3">
             <input
@@ -62,7 +62,8 @@ function Login() {
               <label htmlFor="remember">Remember me</label>
             </div>
             <div className={`${style.checkbox} `}>
-              <span>Don't have any account? </span> <a href="">Register</a>
+              <span>Don't have any account? </span>{" "}
+              <a href="/WEBTEAMONE/register">Register</a>
             </div>
           </div>
           {err || loginSuccess || (

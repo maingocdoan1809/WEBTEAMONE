@@ -30,7 +30,6 @@ loginRouter.post("/", (req, res) => {
                     res.send({ err: true, accept: false });
                 }
                 else {
-                    console.log(result);
                     res.send({
                         err: false,
                         accept: result.length > 0,

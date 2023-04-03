@@ -28,7 +28,6 @@ loginRouter.post("/", (req, res) => {
             console.log("error: " + err.message);
             res.send({ err: true, accept: false } as DBResultLogin);
           } else {
-            console.log(result);
             res.send({
               err: false,
               accept: result.length > 0,
