@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { DBResultLogin } from "./types/DBResult";
+import { DBResultLogin } from "./types/DBTypes";
 import loginRouter from "./routes/loginroute";
 // config .env file.
 dotenv.config();

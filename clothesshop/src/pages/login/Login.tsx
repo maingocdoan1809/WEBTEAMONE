@@ -12,27 +12,32 @@ function Login() {
   const checkboxRef = useRef<HTMLInputElement>(null!);
 
   const onSubmit = async function (evt: React.MouseEvent<HTMLButtonElement>) {
-    const response = await fetch("http://localhost:3000/login", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: usernameRef.current?.value,
-        password: passwordRef.current?.value,
-      }),
-    });
-    const result = await response.json();
-    if (result.accept && checkboxRef.current.checked) {
-      localStorage.setItem("username", result.username);
+    try {
+      const serverEndpoint = "http://localhost:3000/login";
+      const response = await fetch(serverEndpoint, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: usernameRef.current?.value,
+          password: passwordRef.current?.value,
+        }),
+      });
+      const result = await response.json();
+      if (result.accept && checkboxRef.current.checked) {
+        localStorage.setItem("username", result.username);
+      }
+      setErr(result.err);
+      setLoginSuccess(result.accept);
+    } catch (err) {
+      setErr(true);
     }
-    setErr(result.err);
-    setLoginSuccess(result.accept);
   };
   return (
     <>
-      <div className={` ${style.container}`}>
-        <div className={` shadow   ${style.form}`}>
+      <div className={` ${style.container} row`}>
+        <div className={` shadow col-lg-4 col-md-7 col-sm-9  ${style.form}`}>
           <div className="mb-3">
             <h2 className={`${style.center}`}>Login</h2>
           </div>
@@ -56,6 +61,17 @@ function Login() {
             />
             <label htmlFor="password">Password</label>
           </div>
+
+          {err || loginSuccess || (
+            <div className="alert alert-warning" role="alert">
+              Your username or password is not correct. Try again.
+            </div>
+          )}
+          {!err || (
+            <div className="alert alert-danger" role="alert">
+              Something went wrong, we'll fix it soon.
+            </div>
+          )}
           <div className={`${style.checkbox} mb-3 flex-column`}>
             <div className={`${style.checkbox}`}>
               <input type="checkbox" ref={checkboxRef} id="remember" />
@@ -66,16 +82,6 @@ function Login() {
               <a href="/WEBTEAMONE/register">Register</a>
             </div>
           </div>
-          {err || loginSuccess || (
-            <div className="alert alert-warning" role="alert">
-              Your username or password is not correct. Try again.
-            </div>
-          )}
-          {!err || (
-            <div className="alert alert-danger" role="alert">
-              Something's wrong, we're fixing it soon.
-            </div>
-          )}
           <div className={`${style.center}`}>
             <button onClick={onSubmit} className="btn btn-primary w-100">
               Login

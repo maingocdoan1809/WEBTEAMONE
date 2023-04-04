@@ -1,0 +1,15 @@
+.completion {
+  position: relative;
+  background-color: transparent;
+}
+
+
+.completionspan {
+  user-select: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(calc(-50%));
+  left: 0.8rem;
+  opacity: 0.4;
+  overflow: hidden;
+}
