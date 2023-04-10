@@ -84,7 +84,7 @@ function Login() {
           </div>
           <div className={`${style.center}`}>
             <button onClick={onSubmit} className="btn btn-primary w-100">
-              Login
+              Login <i className="fa-thin fa-spinner fa-spin"></i>
             </button>
           </div>
         </div>

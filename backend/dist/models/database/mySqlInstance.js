@@ -12,7 +12,7 @@ function queryToDB(queryStr, callBack) {
             throw err;
         }
         else {
-            connection.query(queryStr, callBack);
+            connection.query(queryStr, callBack).values;
         }
         connection.end();
     });

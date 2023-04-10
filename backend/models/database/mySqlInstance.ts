@@ -8,7 +8,7 @@ export function queryToDB(
     if (err) {
       throw err;
     } else {
-      connection.query(queryStr, callBack);
+      connection.query(queryStr, callBack).values;
     }
     connection.end();
   });

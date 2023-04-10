@@ -4,7 +4,7 @@ import style from "./Main.module.css";
 function Main() {
   return (
     <>
-      <div className="container-fluid">
+      <div>
         <Navbar />
         <div className={`${style.main} container-fluid`}>
           <div className="row"></div>

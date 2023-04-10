@@ -1,3 +1,24 @@
 i {
   font-family: "fontawesome";
 }
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+}
+
+.form-control {
+  box-shadow: inset 0 0 0 black !important;
+}
+
+.form-control:focus {
+  border-color: grey;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+input.form-control:focus {
+  border-color: rgb(201, 135, 135);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}

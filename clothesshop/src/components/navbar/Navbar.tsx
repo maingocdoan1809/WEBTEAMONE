@@ -1,3 +1,4 @@
+import React from "react";
 import SearchInput from "../search/SearchInput";
 import style from "./Navbar.module.css";
 function Navbar() {
@@ -48,12 +49,28 @@ function Navbar() {
                 </a>
               </li>
             </ul>
-            <SearchInput data={["Mai Ngoc Doan", "Doan Dep Trai"]} />
+            <SearchInput handle={getProductName} />
           </div>
         </div>
       </nav>
     </>
   );
 }
+function getProductName(promt: string) {
+  return new Promise(async (resolve) => {
+    const result = await fetch(
+      `http://localhost:3000/product?productname=${promt}`
+    );
+    resolve(
+      result.json().then((data) => {
+        const productName: string[] = [];
+        data.forEach((element: any) => {
+          productName.push(element["productName"]);
+        });
 
+        return productName;
+      })
+    );
+  });
+}
 export default Navbar;

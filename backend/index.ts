@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { DBResultLogin } from "./types/DBTypes";
 import loginRouter from "./routes/loginroute";
+import fetchProductNameRoute from "./api/fetchProductName";
 // config .env file.
 dotenv.config();
 // create express app.
@@ -16,7 +17,7 @@ app.use(express.json());
 
 // use Login router.
 app.use("/login", loginRouter);
-
+app.use("/product", fetchProductNameRoute);
 // server listen to request.
 app.listen(3000, () => {
   console.log("App starting on port 3000");
