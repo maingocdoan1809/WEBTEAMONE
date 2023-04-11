@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "../search/SearchInput";
 import style from "./Navbar.module.css";
 function Navbar() {
@@ -50,6 +50,9 @@ function Navbar() {
               </li>
             </ul>
             <SearchInput handle={getProductName} />
+            <div className="d-flex justify-content-end ms-2">
+              <ButtonToggle />
+            </div>
           </div>
         </div>
       </nav>
@@ -73,4 +76,31 @@ function getProductName(promt: string) {
     );
   });
 }
+
+enum ButtonType {
+  LOGIN,
+  LOGOUT,
+}
+
+function ButtonToggle() {
+  const [state, setState] = useState(ButtonType.LOGIN);
+  useEffect(() => {
+    if (localStorage.getItem("username") != null) {
+      setState(ButtonType.LOGOUT);
+    }
+  });
+  return (
+    <>
+      <a
+        href={
+          state == ButtonType.LOGIN ? "/WEBTEAMONE/login" : "/WEBTEAMONE/logout"
+        }
+        className="btn btn-primary"
+      >
+        {state == ButtonType.LOGIN ? "Login" : "Logout"}
+      </a>
+    </>
+  );
+}
+
 export default Navbar;

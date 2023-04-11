@@ -1,7 +1,8 @@
 import express from "express";
 import mysql from "mysql";
-import { DBResultLogin } from "../types/DBTypes";
+import { Account, AccountState, DBResultLogin } from "../types/DBTypes";
 import { queryToDB } from "../models/database/mySqlInstance";
+import { getPriority, getState } from "../ultils/loginUltils";
 
 const loginRouter = express.Router();
 
@@ -10,7 +11,7 @@ loginRouter.post("/", (req, res) => {
   const password = req.body.password as string;
   try {
     queryToDB(
-      `Select * from Accounts where username = '${username}' and password = '${password}'`,
+      `Select * from Account where username = '${username}' and password = '${password}'`,
       (err, result, fields) => {
         if (err) {
           throw err;
@@ -18,7 +19,12 @@ loginRouter.post("/", (req, res) => {
           res.send({
             err: false,
             accept: result.length > 0,
-            username: username,
+            user: {
+              fullname: result["fullname"],
+              username: result["username"],
+              priority: getPriority(result["priority"]),
+              state: getState(result["state"]),
+            } as Account,
           } as DBResultLogin);
         }
       }

@@ -1,18 +1,28 @@
 import React, { FormEventHandler, useRef, useState } from "react";
 import style from "./Login.module.css";
+import { redirect, useNavigate } from "react-router-dom";
 
 function Login() {
   console.log("Login render");
 
   const [loginSuccess, setLoginSuccess] = useState(true);
   const [err, setErr] = useState(false);
+  const [emptyfield, setEmtyfield] = useState(false);
 
   const usernameRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
   const checkboxRef = useRef<HTMLInputElement>(null!);
 
+  const navigate = useNavigate();
   const onSubmit = async function (evt: React.MouseEvent<HTMLButtonElement>) {
     try {
+      const username = usernameRef.current?.value;
+      const password = passwordRef.current?.value;
+      if (username == "" || password == "") {
+        setEmtyfield(true);
+        return;
+      }
+      setEmtyfield(false);
       const serverEndpoint = "http://localhost:3000/login";
       const response = await fetch(serverEndpoint, {
         method: "post",
@@ -26,7 +36,12 @@ function Login() {
       });
       const result = await response.json();
       if (result.accept && checkboxRef.current.checked) {
-        localStorage.setItem("username", result.username);
+        localStorage.setItem("username", result.user.username);
+        localStorage.setItem("fullname", result.user.fullname);
+      }
+      if (result.accept) {
+        navigate("/WEBTEAMONE/");
+        return;
       }
       setErr(result.err);
       setLoginSuccess(result.accept);
@@ -72,6 +87,11 @@ function Login() {
               Something went wrong, we'll fix it soon.
             </div>
           )}
+          {!emptyfield || (
+            <div className="alert alert-danger" role="alert">
+              You must input both fields
+            </div>
+          )}
           <div className={`${style.checkbox} mb-3 flex-column`}>
             <div className={`${style.checkbox}`}>
               <input type="checkbox" ref={checkboxRef} id="remember" />
@@ -84,7 +104,7 @@ function Login() {
           </div>
           <div className={`${style.center}`}>
             <button onClick={onSubmit} className="btn btn-primary w-100">
-              Login <i className="fa-thin fa-spinner fa-spin"></i>
+              Login
             </button>
           </div>
         </div>
