@@ -14,3 +14,14 @@ export function checkPassword(
     checkSpecialCharPattern.test(password)
   );
 }
+export function checkPhoneNumber(phonenumber: string) {
+  if (phonenumber == "") return false;
+  const checkPhoneNumberPattern = new RegExp("[a-zA-Z]");
+  return !checkPhoneNumberPattern.test(phonenumber);
+}
+export function checkEmail(email: string) {
+  const checkEmailPattern = new RegExp(
+    "^\\w+@\\w*(gmail|email|gov)(\\.w+)*\\.(com|vn|net)$"
+  );
+  return checkEmailPattern.test(email);
+}

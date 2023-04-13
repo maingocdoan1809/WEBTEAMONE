@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import style from "./Register.module.css";
 import { useEffect, useReducer, useRef } from "react";
-import { checkPassword } from "../../utils/regexFuncs";
+import {
+  checkEmail,
+  checkPassword,
+  checkPhoneNumber,
+} from "../../utils/regexFuncs";
 import {
   RegisterAction,
   RegisterArg,
@@ -62,6 +66,11 @@ function Register() {
               }`}
               id="fullname"
             />
+            <AlertField
+              predicate={registerState.registerInfo.fullname.filled}
+              stringIfTrue=""
+              stringIfFalse=" Please fill in this field."
+            />
           </div>
 
           <div className="mb-3">
@@ -88,9 +97,11 @@ function Register() {
                 });
               }}
             />
-            <div id="emailHelp" className="form-text">
-              We'll never share your email with anyone else.
-            </div>
+            <AlertField
+              predicate={registerState.registerInfo.email.filled}
+              stringIfTrue="We'll never share your email with anyone else."
+              stringIfFalse="Your email is not in correct format"
+            />
           </div>
           <div className="mb-3">
             <label htmlFor="phonenumber" className="form-label">
@@ -116,6 +127,11 @@ function Register() {
                 });
               }}
             />
+            <AlertField
+              predicate={registerState.registerInfo.phonenumber.filled}
+              stringIfTrue=""
+              stringIfFalse="Please fill in this field."
+            />
           </div>
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
@@ -140,6 +156,11 @@ function Register() {
                 });
               }}
             />
+            <AlertField
+              predicate={registerState.registerInfo.username.filled}
+              stringIfTrue=""
+              stringIfFalse="Plese fill in this field."
+            />
           </div>
           <div className="mb-3">
             <label htmlFor="password" className="form-label">
@@ -160,7 +181,6 @@ function Register() {
                   : "is-invalid"
               }`}
               id="password"
-              title="Password must contain characters, special characters and numbers"
               value={registerState.registerInfo.password.value}
               onChange={(e) => {
                 dispatch({
@@ -168,6 +188,16 @@ function Register() {
                   action: RegisterAction.CHANGE_PASSWORD,
                 });
               }}
+            />
+            <AlertField
+              predicate={registerState.isPasswordOk}
+              stringIfTrue=""
+              stringIfFalse="Password must contain numbers, words, and special characters"
+            />
+            <AlertField
+              predicate={registerState.registerInfo.password.filled}
+              stringIfTrue=""
+              stringIfFalse="Please fill in this field."
             />
           </div>
           <div className="mb-3">
@@ -198,6 +228,16 @@ function Register() {
                 });
               }}
             />
+            <AlertField
+              predicate={registerState.isPasswordMatch}
+              stringIfTrue=""
+              stringIfFalse="You must enter the exact password you've typed above."
+            />
+            <AlertField
+              predicate={registerState.registerInfo.retypepassword.filled}
+              stringIfTrue=""
+              stringIfFalse="Please fill in this field."
+            />
           </div>
           <div className={`${style.spacebetween}`}>
             <button
@@ -226,6 +266,25 @@ function Register() {
           </div>
         </form>
       </div>
+    </>
+  );
+}
+
+type AlertFieldProps = {
+  predicate: boolean | undefined;
+  stringIfTrue: string;
+  stringIfFalse: string;
+};
+function AlertField(props: AlertFieldProps) {
+  return (
+    <>
+      {props.predicate != false ? (
+        !props.stringIfTrue ?? (
+          <div className="form-text">{props.stringIfTrue}</div>
+        )
+      ) : (
+        <div className="form-text text-danger">{props.stringIfFalse}</div>
+      )}
     </>
   );
 }
@@ -266,7 +325,7 @@ function reducer(state: RegisterState, arg: RegisterArg): RegisterState {
       registerInfo: {
         email: {
           value: state.registerInfo.email.value,
-          filled: state.registerInfo.email.value != "",
+          filled: checkEmail(state.registerInfo.email.value),
         },
         fullname: {
           value: state.registerInfo.fullname.value,
@@ -282,7 +341,7 @@ function reducer(state: RegisterState, arg: RegisterArg): RegisterState {
         },
         phonenumber: {
           value: state.registerInfo.phonenumber.value,
-          filled: state.registerInfo.phonenumber.value != "",
+          filled: checkPhoneNumber(state.registerInfo.phonenumber.value),
         },
         username: {
           value: state.registerInfo.username.value,

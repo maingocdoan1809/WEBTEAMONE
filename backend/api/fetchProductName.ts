@@ -10,15 +10,14 @@ fetchProductNameRoute.get("/", (req, res) => {
       `Select productName from MockData where productName like '${userPromt}%'`,
       (err, result, fields) => {
         if (err) {
-          throw err;
+          res.status(503).send([]);
         } else {
           res.send(result);
         }
       }
     );
   } catch (err) {
-    console.log(err);
-    res.send([]);
+    res.status(503).send([]);
   }
 });
 

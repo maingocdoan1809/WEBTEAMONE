@@ -11,7 +11,7 @@ fetchProductNameRoute.get("/", (req, res) => {
     try {
         (0, mySqlInstance_1.queryToDB)(`Select productName from MockData where productName like '${userPromt}%'`, (err, result, fields) => {
             if (err) {
-                throw err;
+                res.status(503).send([]);
             }
             else {
                 res.send(result);
@@ -19,8 +19,7 @@ fetchProductNameRoute.get("/", (req, res) => {
         });
     }
     catch (err) {
-        console.log(err);
-        res.send([]);
+        res.status(503).send([]);
     }
 });
 exports.default = fetchProductNameRoute;

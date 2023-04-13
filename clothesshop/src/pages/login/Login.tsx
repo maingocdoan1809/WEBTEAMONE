@@ -1,23 +1,24 @@
-import React, { FormEventHandler, useRef, useState } from "react";
+import React, { FormEventHandler, useEffect, useRef, useState } from "react";
 import style from "./Login.module.css";
 import { redirect, useNavigate } from "react-router-dom";
-
+import { sha256 } from "js-sha256";
 function Login() {
-  console.log("Login render");
-
   const [loginSuccess, setLoginSuccess] = useState(true);
   const [err, setErr] = useState(false);
   const [emptyfield, setEmtyfield] = useState(false);
-
-  const usernameRef = useRef<HTMLInputElement>(null!);
-  const passwordRef = useRef<HTMLInputElement>(null!);
-  const checkboxRef = useRef<HTMLInputElement>(null!);
-
+  const [isPending, setPending] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [checkbox, setCheckbox] = useState(false);
+  useEffect(() => {
+    setLoginSuccess(true);
+    setErr(false);
+    setEmtyfield(false);
+  }, [username, password]);
   const navigate = useNavigate();
   const onSubmit = async function (evt: React.MouseEvent<HTMLButtonElement>) {
+    setPending(true);
     try {
-      const username = usernameRef.current?.value;
-      const password = passwordRef.current?.value;
       if (username == "" || password == "") {
         setEmtyfield(true);
         return;
@@ -30,12 +31,12 @@ function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: usernameRef.current?.value,
-          password: passwordRef.current?.value,
+          username,
+          password: sha256(password),
         }),
       });
       const result = await response.json();
-      if (result.accept && checkboxRef.current.checked) {
+      if (result.accept && checkbox) {
         localStorage.setItem("username", result.user.username);
         localStorage.setItem("fullname", result.user.fullname);
       }
@@ -47,6 +48,8 @@ function Login() {
       setLoginSuccess(result.accept);
     } catch (err) {
       setErr(true);
+    } finally {
+      setPending(false);
     }
   };
   return (
@@ -62,7 +65,10 @@ function Login() {
               type="text"
               placeholder="Username"
               name="username"
-              ref={usernameRef}
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
             />
             <label htmlFor="username">Username</label>
           </div>
@@ -72,12 +78,15 @@ function Login() {
               className="form-control"
               placeholder="Password"
               name="password"
-              ref={passwordRef}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <label htmlFor="password">Password</label>
           </div>
 
-          {err || loginSuccess || (
+          {loginSuccess || (
             <div className="alert alert-warning" role="alert">
               Your username or password is not correct. Try again.
             </div>
@@ -94,7 +103,14 @@ function Login() {
           )}
           <div className={`${style.checkbox} mb-3 flex-column`}>
             <div className={`${style.checkbox}`}>
-              <input type="checkbox" ref={checkboxRef} id="remember" />
+              <input
+                type="checkbox"
+                checked={checkbox}
+                id="remember"
+                onChange={(e) => {
+                  setCheckbox(!checkbox);
+                }}
+              />
               <label htmlFor="remember">Remember me</label>
             </div>
             <div className={`${style.checkbox} `}>
@@ -103,8 +119,19 @@ function Login() {
             </div>
           </div>
           <div className={`${style.center}`}>
-            <button onClick={onSubmit} className="btn btn-primary w-100">
-              Login
+            <button
+              onClick={onSubmit}
+              className="btn btn-primary w-100 d-flex gap-2 justify-content-center align-items-center"
+            >
+              <span>Login</span>
+              {!isPending || (
+                <div
+                  className="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
             </button>
           </div>
         </div>
